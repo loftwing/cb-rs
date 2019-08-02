@@ -20,3 +20,4 @@ src/main.rs
 /device_test.json
 /status_all_devices.json
 /single_device.json
+/single_device_status.json
