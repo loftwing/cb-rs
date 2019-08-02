@@ -2,7 +2,7 @@
 
 ## Examples
 * Get all devices
-```
+```rust
 use std::env;
 use std::fs;
 use cb_rs;
