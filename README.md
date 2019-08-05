@@ -24,10 +24,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for x in &monitored {
         println!("{}", x.deviceName.as_ref().unwrap_or(&"NO_NAME".to_owned()));
     }
-    // let f = fs::read("C:\\users\\1045\\repos\\cb-rs\\single_device_status.json")?;
-    // let r: cb::types::CbSingleDeviceStatusResponse = serde_json::from_str(std::str::from_utf8(&f)?)?;
-
-    // dbg!(r);
     Ok(())
 
 }
