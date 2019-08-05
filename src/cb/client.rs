@@ -53,4 +53,18 @@ impl CbClient {
 
         Ok(cb_device_resp.results)
     }
+
+    pub fn set_device_policy(self, dev_id: i64, policy_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+        let req_url = format!("{}{}{}", self.url, "integrationServices/v3/device/", dev_id);
+        let req_body = serde_json::to_string(&CbDeviceStatusChangeRequest::new(policy_name))?;
+
+        let mut res = self.client.patch(&req_url)
+            .body(req_body)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .send()?;
+
+        dbg!(&res);
+
+        Ok(())
+    }
 }
