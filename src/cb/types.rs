@@ -45,6 +45,16 @@ pub struct CbAllDevicesStatusResponse {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct CbPaginatedResponse<T> {
+    pub latestTime: usize,
+    pub success: bool,
+    pub message: String,
+    pub elapsed: usize,
+    pub totalResults: usize,
+    pub results: Vec<T>,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct CbSingleDeviceStatusResponse {
     pub success: bool,
     pub message: String,
@@ -66,7 +76,7 @@ pub struct CbDeviceStatus {
     pub lastReportedTime: Option<i64>,
     pub uninstallCode: Option<String>,
     pub organizationId: Option<usize>,
-    pub deviceId: Option<usize>,
+    pub deviceId: usize,
     pub deviceOwnerId: Option<usize>,
     pub deviceGuid: Option<String>,
     pub email: Option<String>,
