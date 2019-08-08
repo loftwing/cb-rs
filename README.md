@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 * Get all device's status
 ```rust
-let r = client.get_all_devices()?;
+let r = client.get_all_devices_status()?;
 ```
 
 * Get single device's status
