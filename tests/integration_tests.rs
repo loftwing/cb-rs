@@ -42,3 +42,14 @@ fn set_device_policy() {
 
     assert_eq!(r.policyName, Some("Restrictive_Windows_Workstation".to_owned()));
 }
+
+#[test]
+fn get_device_status_search() {
+    let client = setup();
+
+    let search_params = &[("ipAddress", "1.2.3.4")];
+
+    let r = client.get_device_status_search(search_params).unwrap();
+
+    assert_eq!(r[0].deviceId, 218616);
+}
