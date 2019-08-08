@@ -1,7 +1,8 @@
 #![allow(dead_code)]
 use reqwest::{Client, header};
 use log::{info, debug};
-use serde::de::DeserializeOwned;
+use serde::de::{DeserializeOwned};
+use serde::Serialize;
 use std::fmt::Debug;
 use super::types::*;
 
@@ -33,7 +34,7 @@ impl CbClient {
         
         let cbstatusresponse: CbSingleDeviceStatusResponse = serde_json::from_str(&cbstatus_txt)?;
 
-        Ok(cbstatusresponse.deviceInfo)        
+        Ok(cbstatusresponse.deviceInfo)  
     }
 
     pub fn get_all_devices(self) -> Result<Vec<CbDevice>, Box<dyn std::error::Error>> {
@@ -93,17 +94,35 @@ impl CbClient {
         Ok(res)
     }
 
-    pub fn set_device_policy(self, dev_id: i64, policy_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+    pub fn get_device_status_search<T: Serialize + ?Sized>(self, search_params: &T) -> Result<Vec<CbDeviceStatus>, Box<dyn std::error::Error>> {
+        let req_url = format!("{}{}", self.url, "integrationServices/v3/device");
+        let req_build = self.client
+            .request(reqwest::Method::GET, &req_url)
+            .query(search_params)
+            .build()?;
+        
+        let req = req_build.url();
+
+        let res = self.make_paginated_request(&req.as_str())?;
+        info!("Got search results for device status: {}", &res.len());
+        
+        Ok(res)
+    }
+
+    pub fn set_device_policy(self, dev_id: i64, policy_name: &str) -> Result<Option<CbDeviceStatus>, Box<dyn std::error::Error>> {
         let req_url = format!("{}{}{}", self.url, "integrationServices/v3/device/", dev_id);
         let req_body = serde_json::to_string(&CbDeviceStatusChangeRequest::new(policy_name))?;
 
-        let res = self.client.patch(&req_url)
+        dbg!(&req_url);
+        dbg!(&req_body);
+        let mut res = self.client.patch(&req_url)
             .body(req_body)
             .header(reqwest::header::CONTENT_TYPE, "application/json")
             .send()?;
 
-        dbg!(&res);
+        let res_text = res.text()?;
+        let response: CbSingleDeviceStatusResponse = serde_json::from_str(&res_text)?;
 
-        Ok(())
+        Ok(response.deviceInfo)
     }
 }

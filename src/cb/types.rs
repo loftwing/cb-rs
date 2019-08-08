@@ -3,17 +3,7 @@ use serde::{Deserialize, Serialize};
 
 //
 // RESPONSES
-// Mostly for deserialization.
-
-#[derive(Deserialize, Debug)]
-pub struct CbDevicesResponse {
-    pub latestTime: usize,
-    pub success: bool,
-    pub message: String,
-    pub elapsed: usize,
-    pub totalResults: usize,
-    pub results: Vec<CbDevice>,
-}
+//
 
 #[derive(Deserialize, Debug)]
 pub struct CbDevice {
@@ -35,16 +25,6 @@ pub struct CbDevice {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct CbAllDevicesStatusResponse {
-    pub latestTime: usize,
-    pub success: bool,
-    pub message: String,
-    pub elapsed: usize,
-    pub totalResults: usize,
-    pub results: Vec<CbDeviceStatus>,
-}
-
-#[derive(Deserialize, Debug)]
 pub struct CbPaginatedResponse<T> {
     pub latestTime: usize,
     pub success: bool,
@@ -62,7 +42,7 @@ pub struct CbSingleDeviceStatusResponse {
 }
 
 //TODO: get rid of all these options i have no idea what im doing
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct CbDeviceStatus {
     pub adGroupId: Option<usize>,
     pub policyOverride: Option<bool>,
